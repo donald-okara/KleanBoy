@@ -10,14 +10,23 @@ import kotlin.jvm.kotlin
 internal fun Project.configureKotlinMultiplatform(
     extension: KotlinMultiplatformExtension
 ) = extension.apply {
+    val moduleName = path.split(":").drop(1).joinToString(".")
+
     jvmToolchain(17)
 
     // targets
     androidTarget()
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
     jvm()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = moduleName.replace(".", "_") + "_Kit"
+            isStatic = true
+        }
+    }
 
     applyDefaultHierarchyTemplate()
 
