@@ -1,4 +1,4 @@
-package org.example.project
+package com.example.app
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image

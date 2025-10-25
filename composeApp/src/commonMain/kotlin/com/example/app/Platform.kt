@@ -1,4 +1,4 @@
-package org.example.project
+package com.example.app
 
 interface Platform {
     val name: String

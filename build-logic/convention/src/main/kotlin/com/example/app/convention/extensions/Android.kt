@@ -12,12 +12,22 @@ internal fun Project.configureKotlinAndroid(
 ) = extension.apply {
 
     //get module name from module path
-    val moduleName = path.split(":").drop(2).joinToString(".")
-    namespace = if(moduleName.isNotEmpty()) "com.example.app.$moduleName" else "com.example.app"
+    val moduleName = path.split(":").drop(1).joinToString(".")
+    namespace = if (moduleName == "composeApp" || moduleName.isEmpty()) {
+        "com.example.app"
+    } else {
+        "com.example.app.$moduleName"
+    }
+    // TODO: Add dynamic app name and package name
 
     compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()
     defaultConfig {
         minSdk = libs.findVersion("android-minSdk").get().requiredVersion.toInt()
+    }
+    if (this is ApplicationExtension) {
+        defaultConfig {
+            targetSdk = libs.findVersion("android-targetSdk").get().requiredVersion.toInt()
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
