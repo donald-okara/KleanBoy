@@ -36,4 +36,3 @@ plugins {
 
 include(":composeApp")
 includeBuild("build-logic")
-include(":shared")
