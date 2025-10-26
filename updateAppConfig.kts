@@ -148,11 +148,17 @@ fun movePackageDirs(srcDir: File, oldFull: String, newFull: String) {
         }
         // Delete old dirs recursively if empty
         var cur: File? = oldDir
-        while (cur != null && cur.exists() && cur.listFiles()?.isEmpty() == true) {
-            val parent = cur.parentFile
-            cur.delete()
-            cur = parent
+        while (cur != null) {
+            val files = cur.listFiles()
+            if (files != null && files.isEmpty()) {
+                val parent = cur.parentFile
+                cur.delete()
+                cur = parent
+            } else {
+                break
+            }
         }
+
         log("Moved package dir: ${oldDir.path} -> ${newDir.path}")
     }
 }
