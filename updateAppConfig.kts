@@ -7,9 +7,16 @@ val newPackagePrefix = args[0]
 val newPackageName = args[1]
 val newAppName = args[2]
 
-println("[WARNING] This script will refactor package names to: \n   \"$newPackagePrefix.$newPackageName\" \nAnd app name to \n  \"$newAppName\"")
-println("[INFO] Make sure you are on a safe branch and have committed your work.")
-println("[INFO] Enter 'yes' to continue, anything else to abort:")
+fun infoStyle(msg: String) = println("\u001B[34m[INFO]\u001B[0m $msg")       // Blue
+fun warnStyle(msg: String) = println("\u001B[33m[WARNING]\u001B[0m $msg")  // Yellow
+fun errorStyle(msg: String) = println("\u001B[31m[ERROR]\u001B[0m $msg")   // Red
+fun boldStyle(msg: String) = "\u001B[1m$msg\u001B[0m"                     // Bold
+
+
+warnStyle("This script will refactor package names to:\n   ${boldStyle("$newPackagePrefix.$newPackageName")}\n" +
+        "And app name to\n   ${boldStyle(newAppName)}")
+infoStyle("Make sure you are on a safe branch and have committed your work.")
+infoStyle("Enter 'yes' to continue, anything else to abort:")
 val confirmation = readLine()?.trim()?.lowercase()
 if (confirmation != "yes") {
     println("[ABORT] Refactoring cancelled by user.")
