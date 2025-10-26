@@ -6,7 +6,6 @@ if (args.size < 3) {
     println("Usage: updateAppConfig.kts <packagePrefix> <packageName> <appName>")
     exitProcess(1)
 }
-
 val newPackagePrefix = args[0]
 val newPackageName = args[1]
 val newAppName = args[2]
@@ -18,14 +17,15 @@ val stringsFile = File(projectRoot, "composeApp/src/main/res/values/strings.xml"
 fun log(s: String) = println("[INFO] $s")
 fun warn(s: String) = println("[WARN] $s")
 
-// --- 1. Detect old full package ---
+// --- 1. Determine old full package ---
 fun findFirstPackage(root: File): String? {
     val exts = setOf("kt","kts","java")
     root.walkTopDown()
         .filter { it.isFile && it.extension.lowercase() in exts }
         .forEach { f ->
+            val text = f.readText()
             val regex = Regex("^\\s*package\\s+([A-Za-z0-9_.]+)", RegexOption.MULTILINE)
-            regex.find(f.readText())?.let { return it.groupValues[1] }
+            regex.find(text)?.let { return it.groupValues[1] }
         }
     return null
 }
@@ -34,17 +34,17 @@ val oldFullPackage = findFirstPackage(projectRoot) ?: run {
     warn("Could not detect old package automatically; replacements may fail")
     ""
 }
+val oldPackageParts = oldFullPackage.split(".")
+val oldPackagePrefix = if (oldPackageParts.size > 1) oldPackageParts.dropLast(1).joinToString(".") else ""
+val oldPackageName = oldPackageParts.lastOrNull() ?: ""
 
-val oldParts = oldFullPackage.split(".")
-val oldPackagePrefix = if (oldParts.size > 1) oldParts.dropLast(1).joinToString(".") else ""
-val oldPackageName = oldParts.lastOrNull() ?: ""
-
+// New full package
 val newFullPackage = if (newPackagePrefix.isNotEmpty()) "$newPackagePrefix.$newPackageName" else newPackageName
 
 log("Old full package: '$oldFullPackage'")
 log("New full package: '$newFullPackage'")
 
-// --- 2. Update gradle.properties ---
+// --- 2. Update gradle.properties safely ---
 val lines = if (gradlePropertiesFile.exists()) gradlePropertiesFile.readLines().toMutableList() else mutableListOf()
 fun upsert(key: String, value: String) {
     val idx = lines.indexOfFirst { it.startsWith("$key=") }
@@ -62,20 +62,20 @@ if (stringsFile.exists()) {
     val xmlText = stringsFile.readText()
     val pattern = Regex("(?s)<string\\s+name\\s*=\\s*\"app_name\"\\s*>.*?</string>")
     val replacement = "<string name=\"app_name\">${Regex.escapeReplacement(newAppName)}</string>"
-    stringsFile.writeText(pattern.replace(xmlText, replacement))
+    val newXml = pattern.replace(xmlText, replacement)
+    stringsFile.writeText(newXml)
     log("Updated strings.xml")
 }
 
-// --- 4. Build replacements map ---
+// --- 4. Build safe replacements map ---
 val replacements = linkedMapOf<String,String>()
 if (oldFullPackage.isNotBlank()) replacements[oldFullPackage] = newFullPackage
 if (oldPackagePrefix.isNotBlank()) replacements[oldPackagePrefix] = newPackagePrefix
 if (oldPackageName.isNotBlank()) replacements[oldPackageName] = newPackageName
 
-// --- 5. Replace text safely in source files ---
+// --- 5. Scan source files and replace with guardrails ---
 val allowedExt = setOf("kt","kts","java","xml","gradle","properties","mf","json","md","txt","yaml","yml","pro")
 val excludedDirs = setOf("build",".gradle",".git","node_modules","out")
-
 fun isExcluded(f: File): Boolean {
     var cur: File? = f
     while (cur != null && cur.absolutePath.startsWith(projectRoot.absolutePath)) {
@@ -89,22 +89,24 @@ fun replaceInFile(file: File) {
     val text = file.readText()
     var newText = text
 
-    // Replace full package everywhere (safe)
-    if (oldFullPackage.isNotBlank()) newText = newText.replace(oldFullPackage, newFullPackage)
+    // 1. Replace full package everywhere (safe)
+    if (oldFullPackage.isNotBlank()) {
+        newText = newText.replace(oldFullPackage, newFullPackage)
+    }
 
-    // Replace package prefix only in package/import lines
+    // 2. Replace package prefix only in package/import lines
     if (oldPackagePrefix.isNotBlank()) {
         val regex = Regex("(?m)^(\\s*(package|import)\\s+)${Regex.escape(oldPackagePrefix)}")
         newText = regex.replace(newText) { it.groupValues[1] + newPackagePrefix }
     }
 
-    // Replace package name only in package/import lines with word boundary
+    // 3. Replace package name only in package/import lines with word boundary
     if (oldPackageName.isNotBlank()) {
         val regex = Regex("(?m)^(\\s*(package|import)\\s+.*\\.)${Regex.escape(oldPackageName)}\\b")
         newText = regex.replace(newText) { it.groupValues[1] + newPackageName }
     }
 
-    // Replace appName only in safe XML/Gradle/Manifest files
+    // 4. Replace appName only in Gradle/manifest/XML where safe
     if (file.extension in setOf("xml","gradle","properties","mf")) {
         newText = newText.replace(Regex("\\b${Regex.escape(oldPackageName)}\\b"), newPackageName)
         newText = newText.replace(Regex("\\b${Regex.escape(oldFullPackage)}\\b"), newFullPackage)
@@ -123,7 +125,7 @@ log("Replacing package/app references safely...")
 scanAndReplace(projectRoot)
 log("Text replacements complete.")
 
-// --- 6. Move package directories safely (multi-module + nested) ---
+// --- 6. Move package directories safely ---
 fun movePackageDirs(srcDir: File, oldFull: String, newFull: String) {
     if (oldFull.isBlank()) return
     val oldParts = oldFull.split(".").filter { it.isNotBlank() }
@@ -144,7 +146,7 @@ fun movePackageDirs(srcDir: File, oldFull: String, newFull: String) {
                 f.renameTo(targetFile)
             }
         }
-        // Delete empty old dirs recursively
+        // Delete old dirs recursively if empty
         var cur: File? = oldDir
         while (cur != null && cur.exists() && cur.listFiles()?.isEmpty() == true) {
             val parent = cur.parentFile
@@ -155,10 +157,10 @@ fun movePackageDirs(srcDir: File, oldFull: String, newFull: String) {
     }
 }
 
-// --- Multi-module aware scan for all src/kotlin dirs ---
-projectRoot.walkTopDown()
-    .filter { it.isDirectory && it.name == "kotlin" && it.parentFile?.name in setOf("main","test") }
-    .forEach { movePackageDirs(it, oldFullPackage, newFullPackage) }
+val kotlinRoot = File(projectRoot, "composeApp/src")
+kotlinRoot.listFiles()?.filter { it.isDirectory }?.forEach { sourceSetDir ->
+    val kotlinDir = File(sourceSetDir, "kotlin")
+    if (kotlinDir.exists()) movePackageDirs(kotlinDir, oldFullPackage, newFullPackage)
+}
 
 log("Refactoring completed successfully.")
-log("New values: packagePrefix=$newPackagePrefix, packageName=$newPackageName, appName=$newAppName, fullPackage=$newFullPackage")
