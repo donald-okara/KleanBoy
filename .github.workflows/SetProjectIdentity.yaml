@@ -1,0 +1,43 @@
+name: Update App Config & Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      packagePrefix:
+        description: 'Package prefix (e.g., org.example)'
+        required: true
+        default: 'org.example'
+      packageName:
+        description: 'Package name (e.g., application)'
+        required: true
+        default: 'application'
+      appName:
+        description: 'App name (e.g., CleanBoy)'
+        required: true
+        default: 'CleanBoy'
+      confirm:
+        description: 'Confirm running this workflow? (yes to proceed)'
+        required: true
+        default: 'no'
+
+jobs:
+  confirm-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute full package
+        id: fullpackage
+        run: |
+          PREFIX="${{ github.event.inputs.packagePrefix }}"
+          NAME="${{ github.event.inputs.packageName }}"
+          FULL="$PREFIX"
+          if [[ -n "$FULL" && -n "$NAME" ]]; then FULL="$FULL.$NAME"; elif [[ -n "$NAME" ]]; then FULL="$NAME"; fi
+          echo "Full package: $FULL"
+          echo "appName: ${{ github.event.inputs.appName }}"
+          echo "fullPackage=$FULL" >> $GITHUB_OUTPUT
+
+      - name: Abort if not confirmed
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "yes" ]; then
+            echo "Workflow not confirmed. Exiting."
+            exit 1
+          fi
