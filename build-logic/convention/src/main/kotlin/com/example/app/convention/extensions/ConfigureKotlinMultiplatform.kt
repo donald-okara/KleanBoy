@@ -10,8 +10,6 @@ import kotlin.jvm.kotlin
 internal fun Project.configureKotlinMultiplatform(
     extension: KotlinMultiplatformExtension
 ) = extension.apply {
-    val moduleName = path.split(":").drop(1).joinToString(".")
-
     jvmToolchain(17)
 
     // targets

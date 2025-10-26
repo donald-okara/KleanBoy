@@ -1,5 +1,6 @@
 package com.example.app.convention.extensions
 
+import appIdentity
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
@@ -10,13 +11,10 @@ import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies.resource
 internal fun Project.configureKotlinAndroid(
     extension: CommonExtension<*, *, *, * ,* , *>
 ) = extension.apply {
-
-    //get module name from module path
-    val moduleName = path.split(":").drop(1).joinToString(".")
     namespace = if (moduleName == "composeApp" || moduleName.isEmpty()) {
-        "com.example.app"
+        appIdentity.packageName
     } else {
-        "com.example.app.$moduleName"
+        "${appIdentity.packageName}.$moduleName"
     }
     // TODO: Add dynamic app name and package name
 
@@ -44,3 +42,6 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 }
+
+internal val Project.moduleName: String
+    get() = path.split(":").drop(1).joinToString(".")

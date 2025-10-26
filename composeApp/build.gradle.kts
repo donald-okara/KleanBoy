@@ -2,7 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.example.app.kotlinMultiplatformApplication")
+    id("com.example.app.kotlinMultiplatformApplication") // must be known at compile time
 }
 
 kotlin {

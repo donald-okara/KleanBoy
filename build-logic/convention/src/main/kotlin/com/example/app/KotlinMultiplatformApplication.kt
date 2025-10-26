@@ -1,5 +1,6 @@
 package com.example.app
 
+import appIdentity
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
 import com.example.app.convention.extensions.configureKotlinAndroid
@@ -11,10 +12,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class KotlinMultiplatformApplication: Plugin<Project> {
     override fun apply(target: Project):Unit = with(target){
+        // Load from gradle.properties
+
         with(pluginManager){
             listOf(
                 "kotlinMultiplatform",
@@ -23,7 +27,7 @@ class KotlinMultiplatformApplication: Plugin<Project> {
                 pluginManager.apply(libs.findPlugin(id).get().get().pluginId)
             }
 
-            apply("com.example.app.composeMultiplatformPlugin")
+            apply("${appIdentity.packageName}.composeMultiplatformPlugin")
         }
 
         dependencies {

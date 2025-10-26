@@ -9,3 +9,12 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.androidKotlinMultiplatformLibrary) apply false
 }
+
+// in build.gradle.kts
+tasks.register("scanProperties") {
+    doLast {
+        val propsFile = rootProject.file("gradle.properties")
+        propsFile.readText().lineSequence()
+            .forEach { println(it) }
+    }
+}

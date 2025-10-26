@@ -1,4 +1,6 @@
-rootProject.name = "KleanBoy"
+val appName: String by settings
+
+rootProject.name = appName
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
