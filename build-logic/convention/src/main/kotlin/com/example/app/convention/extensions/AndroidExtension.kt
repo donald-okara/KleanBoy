@@ -3,10 +3,8 @@ package com.example.app.convention.extensions
 import appIdentity
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies.resources
 
 internal fun Project.configureKotlinAndroid(
     extension: CommonExtension<*, *, *, * ,* , *>

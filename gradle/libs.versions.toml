@@ -18,6 +18,7 @@ kotlinx-coroutines = "1.10.2"
 kotlinStdlib = "2.2.20"
 runner = "1.7.0"
 core = "1.7.0"
+jetbrainsKotlinJvm = "2.2.20"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -53,3 +54,5 @@ composeMultiplatformPlugin = { id = "com.example.app.composeMultiplatformPlugin"
 kotlinMultiplatformLibrary = { id = "com.example.app.kotlinMultiplatformLibrary", version = "unspecified" }
 kotlinMultiplatformApplication = { id = "com.example.app.kotlinMultiplatformApplication", version = "unspecified" }
 featureConvention = { id = "com.example.app.featureConvention", version = "unspecified" }
+datasourceConvention = { id = "com.example.app.datasourceConvention", version = "unspecified" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
