@@ -16,7 +16,7 @@ fun boldStyle(msg: String) = "\u001B[1m$msg\u001B[0m"                     // Bol
 warnStyle("This script will refactor package names to:\n   ${boldStyle("$newPackagePrefix.$newPackageName")}\n" +
         "And app name to\n   ${boldStyle(newAppName)}")
 infoStyle("Make sure you are on a safe branch and have committed your work.")
-infoStyle("Enter 'yes' to continue, anything else to abort:")
+infoStyle("Enter ${boldStyle("\'yes\'")} to continue, anything else to abort:")
 val confirmation = readLine()?.trim()?.lowercase()
 if (confirmation != "yes") {
     println("[ABORT] Refactoring cancelled by user.")
