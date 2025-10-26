@@ -2,10 +2,14 @@
 import java.io.File
 import kotlin.system.exitProcess
 
-println("[WARNING] This script will refactor package names and app names in the project.")
+// --- rest of your existing script ---
+val newPackagePrefix = args[0]
+val newPackageName = args[1]
+val newAppName = args[2]
+
+println("[WARNING] This script will refactor package names to: \n   \"$newPackagePrefix.$newPackageName\" \nAnd app name to \n  \"$newAppName\"")
 println("[INFO] Make sure you are on a safe branch and have committed your work.")
 println("[INFO] Enter 'yes' to continue, anything else to abort:")
-
 val confirmation = readLine()?.trim()?.lowercase()
 if (confirmation != "yes") {
     println("[ABORT] Refactoring cancelled by user.")
@@ -17,12 +21,7 @@ if (args.size < 3) {
     exitProcess(1)
 }
 
-// --- rest of your existing script ---
-val newPackagePrefix = args[0]
-val newPackageName = args[1]
-val newAppName = args[2]
-
-val projectRoot = File(".").absoluteFile
+val projectRoot: File = File(".").absoluteFile
 val gradlePropertiesFile = File(projectRoot, "gradle.properties")
 val stringsFile = File(projectRoot, "composeApp/src/main/res/values/strings.xml")
 
