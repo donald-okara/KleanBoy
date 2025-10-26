@@ -14,7 +14,6 @@ internal fun Project.configureKotlinAndroid(
     } else {
         "${appIdentity.packageName}.$moduleName"
     }
-    // TODO: Add dynamic app name and package name
 
     compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()
     defaultConfig {
@@ -40,6 +39,3 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 }
-
-internal val Project.moduleName: String
-    get() = path.split(":").drop(1).joinToString(".")

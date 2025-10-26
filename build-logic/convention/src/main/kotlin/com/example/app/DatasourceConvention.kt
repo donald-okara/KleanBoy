@@ -9,7 +9,6 @@ import org.gradle.kotlin.dsl.dependencies
 class DatasourceConvention : Plugin<Project>{
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("${appIdentity.packageName}.kotlinMultiplatformLibrary")
-        pluginManager.apply("${appIdentity.packageName}.composeMultiplatformPlugin")
 
         dependencies {
             coreModules.all.forEach {

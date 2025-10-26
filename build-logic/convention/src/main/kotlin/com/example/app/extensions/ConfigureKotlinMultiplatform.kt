@@ -26,16 +26,6 @@ internal fun Project.configureKotlinMultiplatform(
 
     //common dependencies
     sourceSets.apply {
-        commonMain {
-            dependencies {
-            }
-        }
-
-        androidMain {
-            dependencies {
-            }
-        }
-
         commonTest.dependencies {
             implementation(libs.findLibrary("kotlin.test").get())
         }

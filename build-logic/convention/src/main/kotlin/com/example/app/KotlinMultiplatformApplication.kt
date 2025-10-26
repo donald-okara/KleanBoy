@@ -14,8 +14,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class KotlinMultiplatformApplication: Plugin<Project> {
     override fun apply(target: Project):Unit = with(target){
-        // Load from gradle.properties
-
         with(pluginManager){
             listOf(
                 "kotlinMultiplatform",

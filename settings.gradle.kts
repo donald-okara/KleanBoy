@@ -42,7 +42,7 @@ includeBuild("build-logic")
 include(":core")
 include(":feature")
 include(":datasource")
-include(":presentation")
+include(":shared")
 
 // Core
 include(":core:domain")
@@ -54,7 +54,7 @@ include(":datasource:local")
 
 // Feature
 
-// Presentation
-include(":presentation:design")
-include(":presentation:resources")
-include(":presentation:common")
+// Shared UI
+include(":shared:design")
+include(":shared:resources")
+include(":shared:components")

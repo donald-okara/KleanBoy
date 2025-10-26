@@ -8,6 +8,9 @@ import org.gradle.kotlin.dsl.getByType
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+internal val Project.moduleName: String
+    get() = path.split(":").drop(1).joinToString(".")
+
 val Project.coreModules: CoreModules
     get() = CoreModules(this)
 
@@ -28,13 +31,13 @@ class FeatureModules(private val project: Project) {
     val all: List<Project> = emptyList()
 }
 
-val Project.presentationModules: PresentationModules
-    get() = PresentationModules(this)
+val Project.sharedModules: SharedModules
+    get() = SharedModules(this)
 
-class PresentationModules(private val project: Project) {
-    val design get() = project.project(":presentation:design")
-    val resources get() = project.project(":presentation:resources")
-    val common get() = project.project(":presentation:common")
+class SharedModules(private val project: Project) {
+    val design get() = project.project(":shared:design")
+    val resources get() = project.project(":shared:resources")
+    val common get() = project.project(":shared:components")
 
     val all get() = listOf(design, resources, common)
 }

@@ -11,9 +11,13 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 class ComposeMultiplatformPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager){
-            apply(libs.findPlugin("composeMultiplatform").get().get().pluginId)
-            apply(libs.findPlugin("composeCompiler").get().get().pluginId)
-            apply(libs.findPlugin("composeHotReload").get().get().pluginId)
+            listOf(
+                "composeMultiplatform",
+                "composeCompiler",
+                "composeHotReload",
+            ).forEach { id ->
+                pluginManager.apply(libs.findPlugin(id).get().get().pluginId)
+            }
         }
 
         val composeDeps = extensions.getByType<ComposeExtension>().dependencies
