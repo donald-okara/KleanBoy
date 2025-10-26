@@ -1,6 +1,6 @@
 package com.example.app
 
-import com.example.app.convention.extensions.libs
+import com.example.app.extensions.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

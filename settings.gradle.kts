@@ -53,7 +53,6 @@ include(":datasource:remote")
 include(":datasource:local")
 
 // Feature
-include(":feature:authentication")
 
 // Presentation
 include(":presentation:design")

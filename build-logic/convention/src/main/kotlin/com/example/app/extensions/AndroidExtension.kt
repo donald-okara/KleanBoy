@@ -1,4 +1,4 @@
-package com.example.app.convention.extensions
+package com.example.app.extensions
 
 import appIdentity
 import com.android.build.api.dsl.ApplicationExtension

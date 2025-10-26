@@ -1,4 +1,4 @@
-package com.example.app.convention.extensions
+package com.example.app.extensions
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
@@ -11,9 +11,6 @@ val Project.libs
 val Project.coreModules: CoreModules
     get() = CoreModules(this)
 
-/**
- * Represents all core modules in the project hierarchy.
- */
 class CoreModules(private val project: Project) {
     val domain get() = project.project(":core:domain")
     val utils get() = project.project(":core:utils")
@@ -25,9 +22,10 @@ val Project.featureModules: FeatureModules
     get() = FeatureModules(this)
 
 class FeatureModules(private val project: Project) {
-    val authentication get() = project.project(":feature:authentication")
-
-    val all get() = listOf(authentication)
+    // Your feature module references
+    // e.g
+    // val auth get() = project.project(":feature:auth"))
+    val all: List<Project> = emptyList()
 }
 
 val Project.presentationModules: PresentationModules

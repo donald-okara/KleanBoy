@@ -1,11 +1,7 @@
-package com.example.app.convention.extensions
+package com.example.app.extensions
 
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
-import kotlin.jvm.kotlin
 
 internal fun Project.configureKotlinMultiplatform(
     extension: KotlinMultiplatformExtension
