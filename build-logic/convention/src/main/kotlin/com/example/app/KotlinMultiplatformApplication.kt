@@ -26,14 +26,20 @@ class KotlinMultiplatformApplication: Plugin<Project> {
             apply("${appIdentity.packageName}.composeMultiplatformPlugin")
         }
 
-        dependencies {
-            featureModules.all.forEach {
-                add("implementation", it)
-            }
-            sharedModules.all.forEach{
-                add("implementation", it)
+        extensions.configure<KotlinMultiplatformExtension> {
+            sourceSets.apply {
+                commonMain.dependencies {
+                    featureModules.all.forEach {
+                        implementation(it)
+                    }
+                    sharedModules.all.forEach{
+                        implementation(it)
+                    }
+                }
+
             }
         }
+
         extensions.configure<KotlinMultiplatformExtension>(::configureKotlinMultiplatform)
         extensions.configure<ApplicationExtension>(::configureKotlinAndroid)
     }
