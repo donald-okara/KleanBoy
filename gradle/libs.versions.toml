@@ -48,6 +48,7 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 # Custom app plugins
 composeMultiplatformPlugin = { id = "com.example.app.composeMultiplatformPlugin", version = "unspecified" }
@@ -55,4 +56,3 @@ kotlinMultiplatformLibrary = { id = "com.example.app.kotlinMultiplatformLibrary"
 kotlinMultiplatformApplication = { id = "com.example.app.kotlinMultiplatformApplication", version = "unspecified" }
 featureConvention = { id = "com.example.app.featureConvention", version = "unspecified" }
 datasourceConvention = { id = "com.example.app.datasourceConvention", version = "unspecified" }
-jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
