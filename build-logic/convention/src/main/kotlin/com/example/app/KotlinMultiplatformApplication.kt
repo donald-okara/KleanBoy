@@ -6,6 +6,7 @@ import com.example.app.extensions.configureKotlinAndroid
 import com.example.app.extensions.configureKotlinMultiplatform
 import com.example.app.extensions.featureModules
 import com.example.app.extensions.libs
+import com.example.app.extensions.sharedModules
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -27,6 +28,9 @@ class KotlinMultiplatformApplication: Plugin<Project> {
 
         dependencies {
             featureModules.all.forEach {
+                add("implementation", it)
+            }
+            sharedModules.all.forEach{
                 add("implementation", it)
             }
         }
