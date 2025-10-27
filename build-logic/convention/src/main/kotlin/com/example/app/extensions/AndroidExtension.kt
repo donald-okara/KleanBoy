@@ -12,7 +12,7 @@ internal fun Project.configureKotlinAndroid(
     namespace = if (moduleName == "composeApp" || moduleName.isEmpty()) {
         appIdentity.packageName
     } else {
-        "${appIdentity.packageName}.$moduleName"
+        "${appIdentity.packagePrefix}.$moduleName"
     }
 
     compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()
