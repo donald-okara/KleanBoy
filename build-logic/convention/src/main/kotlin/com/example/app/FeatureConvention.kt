@@ -1,6 +1,7 @@
 package com.example.app
 
 import appIdentity
+import com.example.app.extensions.configureProjectDependencies
 import com.example.app.extensions.coreModules
 import com.example.app.extensions.datasourceModules
 import com.example.app.extensions.sharedModules
@@ -21,20 +22,6 @@ class FeatureConvention : Plugin<Project> {
             }
         }
 
-        extensions.configure<KotlinMultiplatformExtension> {
-            sourceSets.apply {
-                commonMain.dependencies {
-                    coreModules.all.forEach {
-                        implementation(it)
-                    }
-                    datasourceModules.all.forEach {
-                        implementation(it)
-                    }
-                    sharedModules.all.forEach {
-                        implementation(it)
-                    }
-                }
-            }
-        }
+        configureProjectDependencies(coreModules.all, datasourceModules.all, sharedModules.all)
     }
 }
