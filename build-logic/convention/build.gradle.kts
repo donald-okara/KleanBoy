@@ -1,26 +1,29 @@
 plugins {
     `kotlin-dsl`
 }
-
-group = "com.example.app.buildlogic" //your module name
-
+val moduleName = "com.example.app" //your module name
+group = "$moduleName.buildlogic" //your module name
 gradlePlugin {
     plugins {
         register("kotlinMultiplatformLibrary"){
-            id = "com.example.app.kotlinMultiplatformLibrary"
-            implementationClass = "com.example.app.KotlinMultiplatformLibrary"
+            id = "$moduleName.kotlinMultiplatformLibrary"
+            implementationClass = "$moduleName.KotlinMultiplatformLibrary"
         }
         register("kotlinMultiplatformApplication"){
-            id = "com.example.app.kotlinMultiplatformApplication"
-            implementationClass = "com.example.app.KotlinMultiplatformApplication"
+            id = "$moduleName.kotlinMultiplatformApplication"
+            implementationClass = "$moduleName.KotlinMultiplatformApplication"
         }
         register("composeMultiplatformPlugin"){
-            id = "com.example.app.composeMultiplatformPlugin"
-            implementationClass = "com.example.app.ComposeMultiplatformPlugin"
+            id = "$moduleName.composeMultiplatformPlugin"
+            implementationClass = "$moduleName.ComposeMultiplatformPlugin"
         }
-        register("FeatureConvention"){
-            id = "com.example.app.featureConvention"
-            implementationClass = "com.example.app.FeatureConvention"
+        register("featureConvention"){
+            id = "$moduleName.featureConvention"
+            implementationClass = "$moduleName.FeatureConvention"
+        }
+        register("datasourceConvention"){
+            id = "$moduleName.datasourceConvention"
+            implementationClass = "$moduleName.DatasourceConvention"
         }
     }
 }

@@ -34,5 +34,27 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
+// App
 include(":composeApp")
 includeBuild("build-logic")
+
+// Folders
+include(":core")
+include(":feature")
+include(":datasource")
+include(":shared")
+
+// Core
+include(":core:domain")
+include(":core:utils")
+
+// Datasource
+include(":datasource:remote")
+include(":datasource:local")
+
+// Feature
+
+// Shared UI
+include(":shared:design")
+include(":shared:resources")
+include(":shared:components")

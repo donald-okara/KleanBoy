@@ -2,23 +2,18 @@ package com.example.app
 
 import appIdentity
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.api.dsl.LibraryExtension
-import com.example.app.convention.extensions.configureKotlinAndroid
-import com.example.app.convention.extensions.configureKotlinMultiplatform
-import com.example.app.convention.extensions.coreModules
-import com.example.app.convention.extensions.featureModules
-import com.example.app.convention.extensions.libs
+import com.example.app.extensions.configureKotlinAndroid
+import com.example.app.extensions.configureKotlinMultiplatform
+import com.example.app.extensions.featureModules
+import com.example.app.extensions.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 class KotlinMultiplatformApplication: Plugin<Project> {
     override fun apply(target: Project):Unit = with(target){
-        // Load from gradle.properties
-
         with(pluginManager){
             listOf(
                 "kotlinMultiplatform",

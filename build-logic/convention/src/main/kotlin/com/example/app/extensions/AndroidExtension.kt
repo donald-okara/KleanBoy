@@ -1,12 +1,10 @@
-package com.example.app.convention.extensions
+package com.example.app.extensions
 
 import appIdentity
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies.resources
 
 internal fun Project.configureKotlinAndroid(
     extension: CommonExtension<*, *, *, * ,* , *>
@@ -16,7 +14,6 @@ internal fun Project.configureKotlinAndroid(
     } else {
         "${appIdentity.packageName}.$moduleName"
     }
-    // TODO: Add dynamic app name and package name
 
     compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()
     defaultConfig {
@@ -42,6 +39,3 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 }
-
-internal val Project.moduleName: String
-    get() = path.split(":").drop(1).joinToString(".")
